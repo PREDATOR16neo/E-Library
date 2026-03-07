@@ -8,52 +8,60 @@
 
     @if (session('success'))
         <script>
-            Swal.fire({ title: "Success", text: "{{ session('success') }}", icon: "success" });
+            Swal.fire({ title: "Berhasil!", text: "{{ session('success') }}", icon: "success", confirmButtonColor: "#3b82f6", timer: 2000, timerProgressBar: true });
         </script>
     @endif
 
-    <div class="min-h-[80vh] flex flex-col items-center justify-center">
+    <div style="min-height:75vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
 
         {{-- Header --}}
-        <div class="mb-6 text-center">
-            <h1 class="text-xl font-bold text-white">Detail Author</h1>
-            <p class="text-slate-400 text-sm mt-0.5">Informasi lengkap penulis</p>
+        <div style="margin-bottom:24px; text-align:center;">
+            <h1 style="font-size:1.25rem; font-weight:700; color:#1e293b;">Detail Author</h1>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-top:3px;">Informasi lengkap penulis</p>
         </div>
 
         {{-- Card --}}
-        <div class="bg-slate-900 border border-slate-700/50 rounded-2xl px-8 py-8 w-full max-w-md space-y-5">
+        <div style="background:#fff; border:1px solid #e2e8f0; border-radius:18px; padding:32px; width:100%; max-width:420px; box-shadow:0 4px 24px rgba(15,23,42,0.06);">
 
             {{-- Avatar --}}
-            <div class="flex items-center gap-4 pb-5 border-b border-slate-700/50">
-                <div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 text-xl font-bold">
+            <div style="display:flex; align-items:center; gap:16px; padding-bottom:20px; border-bottom:1px solid #f1f5f9; margin-bottom:20px;">
+                <div style="width:52px; height:52px; background:linear-gradient(135deg,#3b82f6,#60a5fa); border-radius:14px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.3rem; font-weight:700; box-shadow:0 4px 14px rgba(59,130,246,0.25); flex-shrink:0;">
                     {{ strtoupper(substr($penulis->name_author, 0, 1)) }}
                 </div>
                 <div>
-                    <p class="text-white font-semibold text-lg">{{ $penulis->name_author }}</p>
-                    <p class="text-slate-400 text-sm">Penulis</p>
+                    <p style="font-size:1rem; font-weight:700; color:#1e293b;">{{ $penulis->name_author }}</p>
+                    <p style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">Penulis</p>
                 </div>
             </div>
 
             {{-- Detail rows --}}
-            <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <span class="text-slate-400 text-sm">Nama Penulis</span>
-                    <span class="text-white text-sm font-medium">{{ $penulis->name_author }}</span>
+            <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:20px;">
+
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.8rem; color:#94a3b8;">Nama Penulis</span>
+                    <span style="font-size:0.855rem; font-weight:600; color:#1e293b;">{{ $penulis->name_author }}</span>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-slate-400 text-sm">Umur</span>
-                    <span class="text-white text-sm font-medium">{{ $penulis->age }} tahun</span>
+
+                <div style="height:1px; background:#f1f5f9;"></div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.8rem; color:#94a3b8;">Umur</span>
+                    <span style="font-size:0.855rem; font-weight:600; color:#1e293b;">{{ $penulis->age }} tahun</span>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-slate-400 text-sm">Alamat</span>
-                    <span class="text-white text-sm font-medium">{{ $penulis->alamat }}</span>
+
+                <div style="height:1px; background:#f1f5f9;"></div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.8rem; color:#94a3b8;">Alamat</span>
+                    <span style="font-size:0.855rem; font-weight:600; color:#1e293b;">{{ $penulis->alamat }}</span>
                 </div>
+
             </div>
 
             {{-- Back button --}}
-            <div class="pt-4 border-t border-slate-700/50">
-                <a href="{{ route('penulis.index') }}" class="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition px-4 py-2.5 rounded-xl hover:bg-slate-800 w-fit">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div style="padding-top:16px; border-top:1px solid #f1f5f9;">
+                <a href="{{ route('penulis.index') }}" style="display:inline-flex; align-items:center; gap:7px; font-size:0.82rem; font-weight:500; color:#64748b; padding:8px 14px; border-radius:10px; text-decoration:none; border:1px solid #e2e8f0; transition:all 0.17s;" onmouseover="this.style.background='#f8fafc';this.style.color='#1e293b';" onmouseout="this.style.background='transparent';this.style.color='#64748b';">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                     Kembali

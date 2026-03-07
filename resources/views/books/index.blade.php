@@ -8,18 +8,18 @@
 
     @if (session('success'))
         <script>
-            Swal.fire({ title: "Success", text: "{{ session('success') }}", icon: "success" });
+            Swal.fire({ title: "Berhasil!", text: "{{ session('success') }}", icon: "success", confirmButtonColor: "#3b82f6", timer: 2000, timerProgressBar: true });
         </script>
     @endif
 
     {{-- Header --}}
-    <div class="flex items-center justify-between mb-6">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
         <div>
-            <h1 class="text-xl font-bold text-white">Buku</h1>
-            <p class="text-slate-400 text-sm mt-0.5">Kelola semua koleksi buku</p>
+            <h1 style="font-size:1.25rem; font-weight:700; color:#1e293b;">Buku</h1>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-top:2px;">Kelola semua koleksi buku</p>
         </div>
-        <a href="{{ route('books.create') }}" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-medium px-4 py-2 rounded-xl transition">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <a href="{{ route('books.create') }}" style="display:flex; align-items:center; gap:8px; background:linear-gradient(135deg,#3b82f6,#60a5fa); color:#fff; font-size:0.82rem; font-weight:600; padding:9px 18px; border-radius:11px; text-decoration:none; box-shadow:0 4px 14px rgba(59,130,246,0.3);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+            <svg xmlns="http://www.w3.org/2000/svg" style="width:15px;height:15px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
             Tambah Buku
@@ -27,45 +27,47 @@
     </div>
 
     {{-- Grid Cards --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:18px;">
         @foreach ($books as $book)
-            <div class="bg-slate-900 border border-slate-700/50 rounded-2xl overflow-hidden hover:border-slate-600 transition group">
+            <div style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 32px rgba(15,23,42,0.1)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';">
 
                 {{-- Book Cover --}}
-                <div class="relative h-48 bg-slate-800 overflow-hidden">
+                <div style="position:relative; height:200px; background:#f1f5f9; overflow:hidden;">
                     <img
                         src="{{ asset('storage/' . $book->image) }}"
                         alt="{{ $book->judul }}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                        style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s;"
+                        onmouseover="this.style.transform='scale(1.05)'"
+                        onmouseout="this.style.transform='scale(1)'"
                     >
-                    <div class="absolute top-3 right-3">
-                        <span class="bg-emerald-500/90 text-white text-xs font-medium px-2.5 py-1 rounded-lg">
+                    <div style="position:absolute; top:10px; right:10px;">
+                        <span style="background:rgba(59,130,246,0.9); color:#fff; font-size:0.65rem; font-weight:600; padding:3px 10px; border-radius:99px; backdrop-filter:blur(4px);">
                             {{ $book->genre->name_genres }}
                         </span>
                     </div>
                 </div>
 
                 {{-- Book Info --}}
-                <div class="p-4 space-y-3">
-                    <div>
-                        <h2 class="text-white font-semibold text-sm leading-snug">{{ $book->judul }}</h2>
-                        <p class="text-slate-400 text-xs mt-0.5">{{ $book->author->name_author }} · {{ $book->tahun_terbit }}</p>
+                <div style="padding:14px;">
+                    <div style="margin-bottom:8px;">
+                        <h2 style="font-size:0.875rem; font-weight:600; color:#1e293b; line-height:1.35;">{{ $book->judul }}</h2>
+                        <p style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">{{ $book->author->name_author }} · {{ $book->tahun_terbit }}</p>
                     </div>
-                    <p class="text-slate-500 text-xs leading-relaxed line-clamp-2">{{ $book->sinopsis }}</p>
+                    <p style="font-size:0.72rem; color:#94a3b8; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:12px;">{{ $book->sinopsis }}</p>
 
                     {{-- Actions --}}
-                    <div class="flex items-center gap-2 pt-1">
-                        <a href="{{ route('books.detail', $book->id) }}" class="flex-1 text-center text-xs font-medium text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 py-1.5 rounded-lg transition">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <a href="{{ route('books.detail', $book->id) }}" style="flex:1; text-align:center; font-size:0.75rem; font-weight:500; color:#3b82f6; background:#eff6ff; border:1px solid #bfdbfe; padding:6px 0; border-radius:8px; text-decoration:none; transition:all 0.15s;" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='#eff6ff'">
                             Detail
                         </a>
-                        <a href="{{ route('books.edit', $book->id) }}" class="flex-1 text-center text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 py-1.5 rounded-lg transition">
+                        <a href="{{ route('books.edit', $book->id) }}" style="flex:1; text-align:center; font-size:0.75rem; font-weight:500; color:#475569; background:#f8fafc; border:1px solid #e2e8f0; padding:6px 0; border-radius:8px; text-decoration:none; transition:all 0.15s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
                             Edit
                         </a>
                         <form action="{{ route('books.delete', $book->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="button" onclick="tombol(this)" class="text-xs font-medium text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-3 py-1.5 rounded-lg transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <button type="button" onclick="tombol(this)" style="display:flex; align-items:center; justify-content:center; color:#ef4444; background:#fff5f5; border:1px solid #fecaca; padding:6px 10px; border-radius:8px; cursor:pointer; transition:all 0.15s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fff5f5'">
+                                <svg xmlns="http://www.w3.org/2000/svg" style="width:13px;height:13px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
                             </button>
@@ -79,13 +81,14 @@
     <script>
         function tombol(btn) {
             Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
+                title: "Hapus buku ini?",
+                text: "Data yang dihapus tidak bisa dikembalikan!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
+                confirmButtonColor: "#ef4444",
+                cancelButtonColor: "#94a3b8",
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Batal"
             }).then((result) => {
                 if (result.isConfirmed) {
                     btn.closest('form').submit();

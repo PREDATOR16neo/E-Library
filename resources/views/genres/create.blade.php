@@ -4,43 +4,46 @@
 
     @if (session('success'))
         <script>
-            Swal.fire({ title: "Success", text: "{{ session('success') }}", icon: "success" });
+            Swal.fire({ title: "Berhasil!", text: "{{ session('success') }}", icon: "success", confirmButtonColor: "#3b82f6", timer: 2000, timerProgressBar: true });
         </script>
     @endif
 
-    <div class="min-h-[80vh] flex flex-col items-center justify-center">
+    <div style="min-height:75vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
 
         {{-- Header --}}
-        <div class="mb-6 text-center">
-            <h1 class="text-xl font-bold text-white">Tambah Genre</h1>
-            <p class="text-slate-400 text-sm mt-0.5">Tambahkan genre buku baru</p>
+        <div style="margin-bottom:24px; text-align:center;">
+            <h1 style="font-size:1.25rem; font-weight:700; color:#1e293b;">Tambah Genre</h1>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-top:3px;">Tambahkan genre buku baru</p>
         </div>
 
         {{-- Card Form --}}
-        <div class="bg-slate-900 border border-slate-700/50 rounded-2xl px-8 py-8 w-full max-w-md">
-            <form method="POST" action="{{ route('genre.store') }}" class="space-y-5">
+        <div style="background:#fff; border:1px solid #e2e8f0; border-radius:18px; padding:32px; width:100%; max-width:420px; box-shadow:0 4px 24px rgba(15,23,42,0.06);">
+            <form method="POST" action="{{ route('genre.store') }}">
                 @csrf
 
-                <div>
-                    <label for="name_genres" class="block text-sm font-medium text-slate-300 mb-1.5">Nama Genre</label>
+                <div style="margin-bottom:20px;">
+                    <label for="name_genres" style="display:block; font-size:0.78rem; font-weight:600; color:#475569; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.06em;">Nama Genre</label>
                     <input
                         type="text"
                         name="name_genres"
                         id="name_genres"
                         required
                         placeholder="contoh: Fiksi, Sejarah..."
-                        class="w-full bg-slate-800 border border-slate-700 text-white placeholder-slate-500 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+                        style="width:100%; background:#f8fafc; border:1px solid #e2e8f0; color:#1e293b; border-radius:11px; padding:10px 14px; font-size:0.875rem; outline:none; transition:border 0.17s; font-family:'Outfit',sans-serif;"
+                        onfocus="this.style.borderColor='#3b82f6';this.style.background='#fff';"
+                        onblur="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc';"
                     />
                 </div>
 
-                <div class="flex items-center gap-3 pt-2">
-                    <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition">
+                <div style="display:flex; align-items:center; gap:10px; padding-top:4px;">
+                    <button type="submit" style="background:linear-gradient(135deg,#3b82f6,#60a5fa); color:#fff; font-weight:600; font-size:0.855rem; padding:10px 22px; border-radius:11px; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(59,130,246,0.3); transition:opacity 0.17s; font-family:'Outfit',sans-serif;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
                         Simpan
                     </button>
-                    <a href="{{ route('genre.index') }}" class="text-sm text-slate-400 hover:text-white transition px-5 py-2.5 rounded-xl hover:bg-slate-800">
+                    <a href="{{ route('genre.index') }}" style="font-size:0.855rem; color:#94a3b8; padding:10px 18px; border-radius:11px; text-decoration:none; border:1px solid #e2e8f0; transition:all 0.17s;" onmouseover="this.style.background='#f8fafc';this.style.color='#475569';" onmouseout="this.style.background='transparent';this.style.color='#94a3b8';">
                         Batal
                     </a>
                 </div>
+
             </form>
         </div>
 

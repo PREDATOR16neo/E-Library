@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Books;
+use App\Models\Genres;
+use App\Models\Authors;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,8 +14,12 @@ class AuthController extends Controller
     //
     public function index()
     {
-        $books = Books::all();
-        return view('user.index', compact('books'));
+        $books        = Books::with(['genre', 'author'])->get();
+        $totalBuku    = $books->count();
+        $totalGenre   = \App\Models\Genres::count();
+        $totalPenulis = \App\Models\Authors::count();
+
+        return view('user.index', compact('books', 'totalBuku', 'totalGenre', 'totalPenulis'));
     }
 
     public function login()
@@ -28,7 +34,10 @@ class AuthController extends Controller
 
     public function dashboard()
     {
-        return view('index');
+    $totalBuku    = \App\Models\Books::count();
+    $totalGenre   = \App\Models\Genres::count();
+    $totalPenulis = \App\Models\Authors::count();
+    return view('index', compact('totalBuku', 'totalGenre', 'totalPenulis'));
     }
 
     public function actionLogin(Request $request){
@@ -36,18 +45,19 @@ class AuthController extends Controller
             'email'=>'required|email',
             'password'=>'required'
         ]);
+        $credentials = $request->only('email', 'password');
 
-        if(!$login){
-            return redirect()->back()->with('error', 'Isi yang benerlah kocak');
-        }
-
-        if(Auth::attempt($login)){
-            if(Auth::user()->role == 'admin'){
-                return redirect()->route('dashboard')->with('success', 'Login Berhasil Sebagai Admin');
+        if (Auth::attempt($credentials)) {
+            if (Auth::user()->role == 'admin') {
+                return redirect()->route('dashboard')->with('success', 'Login Berhasil sebagai admin');
             }
-            return redirect()->route('home')->with('success', 'berhasil login sebagi user');
+            return redirect()->route('home')->with('success', 'Login Berhasil sebagai user');
         }
-        return redirect()->route('home')->with('error', 'Login Gagal, pastikan email dan password benar');
+
+        // ← Ini yang penting, harus ada!
+        return back()->withErrors([
+            'email' => 'Email atau password salah.'
+        ]);
     }
 
     public function logout(){

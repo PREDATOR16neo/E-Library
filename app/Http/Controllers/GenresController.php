@@ -85,6 +85,6 @@ class GenresController extends Controller
         //
         $hapus = Genres::find($id)->delete();
 
-        return redirect()->route('genre.index')->with('success');
+        return redirect()->route('genre.index')->with('success' , 'berhasil hapus genre');
     }
 }

@@ -42,11 +42,11 @@ class AuthorsController extends Controller
         ]);
 
         if(!$validasi){
-            return redirect()->route('penulis.index')->with('error');
+            return redirect()->route('penulis.index')->with('error' , 'Data Gagal Ditambahkan');
         }
         
         Authors::create($validasi);
-        return redirect()->route('penulis.index')->with('sucsess');
+        return redirect()->route('penulis.index')->with('success', 'Data Berhasil Ditambahkan');
     }
 
     /**
@@ -77,7 +77,7 @@ class AuthorsController extends Controller
         //
         $update = Authors::find($id);
         if(!$update){
-            return redirect()->route('penulis.index')->with('error');
+            return redirect()->route('penulis.index')->with('error' , 'Data Tidak Ditemukan');
         }
 
         $update->update([
@@ -86,7 +86,7 @@ class AuthorsController extends Controller
             "alamat" => $request->alamat
         ]);
 
-        return redirect()->route('penulis.index')->with('success');
+        return redirect()->route('penulis.index')->with('success' , 'Data Berhasil Diupdate');
     }
 
     /**
@@ -102,6 +102,6 @@ class AuthorsController extends Controller
         }
 
         $delete->delete();
-        return redirect()->route('penulis.index')->with('success');
+        return redirect()->route('penulis.index')->with('success', 'Data Berhasil Dihapus');
     }
 }

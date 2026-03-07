@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GenresController;
 use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\BooksController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'index'])->name('home');
@@ -38,7 +39,12 @@ Route::get('/author/show/{id}', action: [AuthorsController::class , 'show'])->na
 Route::get('/author/edit/{id}', action: [AuthorsController::class , 'edit'])->name('penulis.edit');
 Route::delete('/author/delete/{id}', [AuthorsController::class , 'destroy'])->name('penulis.destroy');
 Route::put('/author/update/{id}', [AuthorsController::class , 'update'])->name('penulis.update');
-// END Route author
+    // END Route author
+
+    // Open Avatar
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
+    Route::delete('/profile/avatar', [ProfileController::class, 'removeAvatar'])->name('profile.remove');
+// Close Avatar
 
 // Route Books
 Route::get( '/books', [BooksController::class,'index'])->name('books.index');
@@ -53,4 +59,4 @@ Route::put( '/books/update/{id}', [BooksController::class,'update'])->name(name:
 });
 
 
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
