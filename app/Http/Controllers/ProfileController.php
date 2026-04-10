@@ -1,5 +1,5 @@
 <?php
-// app/Http/Controllers/ProfileController.php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -16,16 +16,16 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
-        // Hapus avatar lama kalau ada
-        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+        // Hapus avatar lama kalau ada (selalu hapus sebelum upload baru)
+        if ($user->avatar) {
             Storage::disk('public')->delete($user->avatar);
         }
 
         // Simpan avatar baru
         $path = $request->file('avatar')->store('avatars', 'public');
 
-        $user->avatar = $path;
-        $user->save();
+        // Update langsung pakai query agar tidak kena cache model
+        \App\Models\User::where('id', $user->id)->update(['avatar' => $path]);
 
         return back()->with('success', 'Foto profil berhasil diperbarui!');
     }
@@ -34,12 +34,11 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+        if ($user->avatar) {
             Storage::disk('public')->delete($user->avatar);
         }
 
-        $user->avatar = null;
-        $user->save();
+        \App\Models\User::where('id', $user->id)->update(['avatar' => null]);
 
         return back()->with('success', 'Foto profil berhasil dihapus!');
     }

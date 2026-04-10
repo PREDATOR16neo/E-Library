@@ -10,42 +10,39 @@ use Illuminate\Support\Facades\Storage;
 
 class BooksController extends Controller
 {
-    //
-    function index(){
-        $books= Books::all();
-        return view('books.index', compact('books'));
-        }
-
-        public function create()
+    function index()
     {
-        $genres = Genres::all();
+        $books = Books::with(['genre', 'author'])->get();
+        return view('books.index', compact('books'));
+    }
+
+    public function create()
+    {
+        $genres  = Genres::all();
         $authors = Authors::all();
         return view('books.create', compact('genres', 'authors'));
     }
 
-    public function store(Request $request){
-        $books = $request->validate([
-            'judul' => 'required|max:255',
-            'sinopsis' => 'required|max:255',
+    public function store(Request $request)
+    {
+        $request->validate([
+            'judul'        => 'required|max:255',
+            'sinopsis'     => 'required|max:255',
             'tahun_terbit' => 'required|integer',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'genre_id' => 'required',
-            'author_id' => 'required'
+            'image'        => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'genre_id'     => 'required',
+            'author_id'    => 'required'
         ]);
 
         $imagePath = $request->file('image')->store('Books', 'public');
 
-        if(!$books){
-            return redirect()->route('books.index')->with('error', 'Gagal menambahkan Data');
-        }
-
         Books::create([
-            'judul' => $request->judul,
-            'sinopsis' => $request->sinopsis,
+            'judul'        => $request->judul,
+            'sinopsis'     => $request->sinopsis,
             'tahun_terbit' => $request->tahun_terbit,
-            'image' => $imagePath,
-            'genre_id' => $request->genre_id,
-            'author_id' => $request->author_id
+            'image'        => $imagePath,
+            'genre_id'     => $request->genre_id,
+            'author_id'    => $request->author_id
         ]);
 
         return redirect()->route('books.index')->with('success', 'Data berhasil ditambahkan');
@@ -53,14 +50,15 @@ class BooksController extends Controller
 
     public function detail($id)
     {
-        $detail = Books::findOrFail($id);
+        $detail = Books::with(['genre', 'author'])->findOrFail($id);
         return view('books.detail', compact('detail'));
     }
 
-    public function destroy($id){
-        $delete = Books::find($id);
-        
-        if($delete->image && Storage::disk('public')->exists($delete->image)){
+    public function destroy($id)
+    {
+        $delete = Books::findOrFail($id);
+
+        if ($delete->image && Storage::disk('public')->exists($delete->image)) {
             Storage::disk('public')->delete($delete->image);
         }
 
@@ -68,32 +66,50 @@ class BooksController extends Controller
         return redirect()->route('books.index')->with('success', 'Data berhasil dihapus');
     }
 
-    public function edit($id){
-        $books = Books::find($id);
-        $genres = Genres::all();
+    public function edit($id)
+    {
+        $books   = Books::findOrFail($id);
+        $genres  = Genres::all();
         $authors = Authors::all();
         return view('books.edit', compact('books', 'genres', 'authors'));
     }
 
-    public function update(Request $request, $id){
-        $books = Books::find($id);
+    public function update(Request $request, $id)
+    {
+        $books = Books::findOrFail($id);
 
-        $validate = $request->validate([
-            'judul' => 'required|max:255',
-            'sinopsis' => 'required',
-            'tahun_terbit' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'genre_id' => 'required',
-            'author_id' => 'required'
+        // ── Validasi ──
+        $request->validate([
+            'judul'        => 'required|max:255',
+            'sinopsis'     => 'required',
+            'tahun_terbit' => 'required|integer',
+            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'genre_id'     => 'required',
+            'author_id'    => 'required'
         ]);
 
-        if($books->image && Storage::disk('public')->exists($books->image)){
-            
-            $imagepath = $request->file('image')->store('Books', 'public');
+        // ── Handle image ──
+        $imagePath = $books->image; // default: pakai gambar lama
 
-            $validate['image'] = $imagepath;
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama
+            if ($books->image && Storage::disk('public')->exists($books->image)) {
+                Storage::disk('public')->delete($books->image);
+            }
+            // Simpan gambar baru
+            $imagePath = $request->file('image')->store('Books', 'public');
         }
-        $books->update($validate);
+
+        // ── Update data ──
+        $books->update([
+            'judul'        => $request->judul,
+            'sinopsis'     => $request->sinopsis,
+            'tahun_terbit' => $request->tahun_terbit,
+            'image'        => $imagePath,
+            'genre_id'     => $request->genre_id,
+            'author_id'    => $request->author_id,
+        ]);
+
         return redirect()->route('books.index')->with('success', 'Data berhasil diupdate');
     }
 }
