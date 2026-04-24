@@ -248,8 +248,8 @@
         <div class="books-grid" id="booksGrid">
             @forelse ($books as $book)
             <a href="{{ route('books.detail', $book->id) }}" class="book-card"
-               data-title="{{ strtolower($book->judul) }}"
-               data-author="{{ strtolower($book->author->name_author ?? '') }}">
+            data-title="{{ strtolower($book->judul) }}"
+            data-author="{{ strtolower($book->author->name_author ?? '') }}">
 
                 <div class="book-cover-wrap">
                     @if($book->image)
